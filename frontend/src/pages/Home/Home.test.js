@@ -1,9 +1,13 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { API_URL } from '../../utils/constants';
 import axios from 'axios';
 import Home from '.';
 
 describe('Test Home', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('Test Render', async () => {
     //Arrange: Setup the mock API
     //Listen for any GET requests using the axios module
@@ -41,6 +45,18 @@ describe('Test Home', () => {
     //Act: Call the Home page
     render(<Home />);
 
+    //Assert: Check the values in the rendered Home page.
+    //There should be 2 categories as defined in the mock response above
+    expect(await screen.findAllByTestId(/category-item/i)).toHaveLength(2);
+    //The word Appeateasers should be in there as defined in the mock response above.
+    expect(await screen.findByText('Appeteasers')).toBeInTheDocument();
+  });
+
+  //Copied "Test Render"
+  test('Test Integration Render', async () => {
+    //Deleted the mock calls.  There is no Arrange for this test since this will access the shared servers.
+    //Act: Call the Home page
+    render(<Home />);
     //Assert: Check the values in the rendered Home page.
     //There should be 2 categories as defined in the mock response above
     expect(await screen.findAllByTestId(/category-item/i)).toHaveLength(2);
